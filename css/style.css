@@ -66,3 +66,9 @@ header {
 #searchBtn:hover, #prevBtn:hover, #nextBtn:hover, #resetBtn:hover {
   opacity: 0.8;
 }
+
+.pokeDatos{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
