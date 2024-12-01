@@ -3,74 +3,89 @@ const anterPag = document.getElementById("prevBtn");
 const proxPag = document.getElementById("nextBtn");
 const reseteo = document.getElementById("resetBtn");
 const app = document.getElementById("app");
-const url = "https://pokeapi.co/api/v2/pokemon?limit=10"
+let offset = 0;
+let limit = 10;
+let totalPaginas = 132;
+let paginaActual = 1;
 
 
-const pokemonesFiltrados = []
-const cadaPokeData = []
-
-// Acá inicio la solicitud fetch
-
-const pokeFetch = async (id) => {
-    const url2 = `https://pokeapi.co/api/v2/pokemon/${id}/`
-    try{
-        const response = await fetch (url2);
+const pokemonFetch = async () => {
+    const url = `https://pokeapi.co/api/v2/pokemon?offset=${offset}&limit=${limit}`;
+    try {
+        const response = await fetch(url);
         if (!response.ok) {
-            throw new Error ("Error en la solicitud", response.status);
+            throw new Error("Error en la solicitud", response.status);
         }
         const data = await response.json();
-        console.log("Data Template", data);
-        app.innerHTML += `
-            <div class="pokeDatos">
-        <h2>${data.name.toUpperCase()}</h2>
-        <img src=${data.sprites.front_default} alt="${data.name}">
-        <h3>Tipo: ${data.types[0].type.name.toUpperCase()}</h3>
-        <h3>Altura: ${data.height} Ft</h3>
-        <h3>Peso: ${data.weight} Kg.</h3>
-        </div>
-        `;
-        return data;
-    }   
-    catch (error){
-        console.log("Ha Surgido un Error", error)
-    }
-}
+        console.log("Limit 10", data);
 
-const obtenerVariosPokemones = async () => {
-    for (let id = 1; id <= 10; id++) { 
-        const pokemon = await pokeFetch(id);
+        
+        const detalles = await Promise.all(
+            data.results.map((pokemon) => pokemonFetchData(pokemon.url))
+        );
+
+        cargarPokemones(detalles)
+        console.log("Data Completa Pokémon:", detalles);
+
+        return detalles;
+
+    } catch (error) {
+        console.log("Ha surgido un error", error);
+        return [];
     }
 };
 
-const template = async () => {
+const pokemonFetchData = async (url) => {
     try {
-        const response = await fetch (url)
-            if (!response.ok){
-            throw new Error ("Error en la solicitud", response.status);
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error("Error en la solicitud", response.status);
         }
+        
         const data = await response.json();
-        console.log("Limit 10",data);
+        console.log("Detalles del Pokémon:", data);
+        
+        return data;
 
-        for (let i = 0; i < data.results.length; i++){
-        const pokemonData = {
-            urlEspecifico: data.results[i].url,
-        }
-        pokemonesFiltrados.push(pokemonData);
-        };
+    } catch (error) {
+        console.log("Ha surgido un error al obtener los detalles", error);
     }
+};
 
-    catch (error){
-        console.log("Ha Surgido un Error", error)
-    };
-}
+function cargarPokemones (detalles) {
+    app.innerHTML = "";
 
-function cargarPokemones () {
-    app.innerHTML = `
-    
-    `
-}
+    detalles.forEach(pokemon => {
+        if (pokemon) {
+            app.innerHTML += `
+                <div class="pokemon-card">
+                    <h2>${pokemon.name}</h2>
+                    <img src="${pokemon.sprites.front_default}" alt="${pokemon.name}">
+                    <p>Tipo: ${pokemon.types.map(type => type.type.name).join(", ").toUpperCase()}</p>
+                    <p>Altura: ${pokemon.height} m</p>
+                    <p>Peso: ${pokemon.weight} kg</p>
+                </div>
+            `;
+        }
+    });
+};
 
-pokeFetch();
-obtenerVariosPokemones()
-template();
-cargarPokemones()
+proxPag.addEventListener("click", () => {
+    if (paginaActual < totalPaginas){
+        offset += limit; // se actualiza offset en el valor de limit
+        paginaActual++
+
+        pokemonFetch(); 
+    }
+})
+
+anterPag.addEventListener("click", () => {
+    if (paginaActual > 1){
+        offset -= limit; // se actualiza offset en el valor de limit
+        paginaActual--
+
+        pokemonFetch(); 
+    }
+})
+
+pokemonFetch();
