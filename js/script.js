@@ -4,6 +4,7 @@ const anterPag = document.getElementById("prevBtn");
 const proxPag = document.getElementById("nextBtn");
 const reseteo = document.getElementById("resetBtn");
 const app = document.getElementById("app");
+const favoritos = document.getElementById("imgEstrella")
 let offset = 0;
 let limit = 10;
 let totalPaginas = 132;
@@ -69,6 +70,7 @@ function cargarPokemones (detalles) {
                     <p>Tipo: ${pokemon.types.map(type => type.type.name).join(", ").toUpperCase()}</p>
                     <p>Altura: ${pokemon.height} Dm</p>
                     <p>Peso: ${pokemon.weight} Hg</p>
+                    <img class="imgEstrella" src="./assets/img/estrella.png" alt="pokeBall">
                 </div>
             `;
         }
@@ -114,5 +116,69 @@ reseteo.addEventListener("click", () => {
     pokemonFetch()
 })
 
-pokemonFetch();
+document.addEventListener("click", (event) => {
+    if (event.target.classList.contains("imgEstrella") || event.target.classList.contains("imgEstrellaSumado")) {
+        const pokeDatos = event.target.closest(".pokeDatos");
+        const nombrePokemon = pokeDatos.querySelector("h2").textContent.trim();
+        const tipoPokemon = pokeDatos.querySelector("p:nth-of-type(1)").textContent.trim();
+        const alturaPokemon = pokeDatos.querySelector("p:nth-of-type(2)").textContent.trim();
+        const pesoPokemon = pokeDatos.querySelector("p:nth-of-type(3)").textContent.trim();
+        const imagenPokemon = pokeDatos.querySelector("img").src;
 
+        // Crear objeto Pokémon
+        const pokemon = {
+            nombre: nombrePokemon,
+            tipo: tipoPokemon,
+            altura: alturaPokemon,
+            peso: pesoPokemon,
+            imagen: imagenPokemon
+        };
+
+        // Obtener favoritos desde localStorage
+        let favoritos = JSON.parse(localStorage.getItem("favoritos")) || [];
+
+        // Verificar si el Pokémon ya está en favoritos
+        const existe = favoritos.some(fav => fav.nombre === pokemon.nombre);
+
+        // Si no está en favoritos, lo agregamos y cambiamos la clase a "imgEstrellaSumado"
+        if (!existe) {
+            favoritos.push(pokemon);
+            localStorage.setItem("favoritos", JSON.stringify(favoritos));
+
+            // Cambiar la clase de la estrella a "imgEstrellaSumado"
+            event.target.classList.remove("imgEstrella");
+            event.target.classList.add("imgEstrellaSumado");
+        } else {
+            // Si ya está en favoritos, lo eliminamos y cambiamos la clase a "imgEstrella"
+            favoritos = favoritos.filter(fav => fav.nombre !== pokemon.nombre);
+            localStorage.setItem("favoritos", JSON.stringify(favoritos));
+
+            // Cambiar la clase de la estrella de vuelta a "imgEstrella"
+            event.target.classList.remove("imgEstrellaSumado");
+            event.target.classList.add("imgEstrella");
+        }
+    }
+});
+
+// Al cargar la página, restauramos el estado de las estrellas según los favoritos almacenados
+document.addEventListener("DOMContentLoaded", () => {
+    // Obtener favoritos desde localStorage
+    const favoritos = JSON.parse(localStorage.getItem("favoritos")) || [];
+
+    // Para cada estrella, verificamos si el Pokémon está en favoritos
+    const todasLasEstrellas = document.querySelectorAll(".imgEstrella, .imgEstrellaSumado");
+
+    todasLasEstrellas.forEach(estrella => {
+        const pokeDatos = estrella.closest(".pokeDatos");
+        const nombrePokemon = pokeDatos.querySelector("h2").textContent.trim();
+
+        // Si el Pokémon está en favoritos, cambiamos la clase a "imgEstrellaSumado"
+        const estaEnFavoritos = favoritos.some(fav => fav.nombre === nombrePokemon);
+        if (estaEnFavoritos) {
+            estrella.classList.remove("imgEstrella");
+            estrella.classList.add("imgEstrellaSumado");
+        }
+    });
+});
+
+pokemonFetch();

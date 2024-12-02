@@ -19,6 +19,9 @@ body {
     50% { background-position: 100% 50%; }
     100% { background-position: 0% 50%; }
 }
+.bodyFav{
+  height: 60rem;
+}
 
 header {
   background-color: transparent;
@@ -34,6 +37,14 @@ header {
 }
 
 #app {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding: 20px;
+}
+
+#favoritosContainer{
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
@@ -76,12 +87,18 @@ header {
   background-color: transparent;
   border: 1px solid white;
   color: white;
+  box-shadow: 0px 0px 14px 0px rgba(0,0,0,0.75);
+  -moz-box-shadow: 0px 0px 14px 0px rgba(0,0,0,0.75);
+  box-shadow: 0px 0px 14px 0px rgba(0,0,0,0.75);
 }
 
 #prevBtn, #nextBtn, #resetBtn {
   border: 1px solid white;
   background-color: transparent;
   color: white;
+  box-shadow: 0px 0px 14px 0px rgba(0,0,0,0.75);
+  -moz-box-shadow: 0px 0px 14px 0px rgba(0,0,0,0.75);
+  box-shadow: 0px 0px 14px 0px rgba(0,0,0,0.75);
 }
 
 #searchBtn:hover, #prevBtn:hover, #nextBtn:hover, #resetBtn:hover {
@@ -92,10 +109,57 @@ header {
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-top: 6rem;
 }
 
 .botonera{
   display: flex;
   justify-content: center;
   gap: 2rem;
+}
+
+.imgFav{
+  width: 5rem;
+  height: auto;
+  position: fixed;
+  bottom: 3rem;
+  right: 3rem;
+  border-radius: 50px;
+  box-shadow: 0px 0px 14px 0px rgba(0,0,0,0.75);
+  -moz-box-shadow: 0px 0px 14px 0px rgba(0,0,0,0.75);
+  box-shadow: 0px 0px 14px 0px rgba(0,0,0,0.75);
+}
+
+input{
+  border-radius: 50px;
+  box-shadow: 0px 0px 14px 0px rgba(0,0,0,0.75);
+  -moz-box-shadow: 0px 0px 14px 0px rgba(0,0,0,0.75);
+  box-shadow: 0px 0px 14px 0px rgba(0,0,0,0.75);
+}
+
+button.favBoton{
+  background-color: transparent;
+  border: none;
+}
+
+.imgEstrella{
+  width: 2rem;
+  height: auto;
+  position: relative;
+  transition: 1s;
+}
+
+.imgEstrellaSumado{
+  padding: 4px;
+  border-radius: 50px;
+  background-color: transparent;
+  border: solid 1px white;
+  width: 2.5rem;
+  height: auto;
+  position: relative;
+  transform: rotate(360deg);
+  transition: 1s;
+  box-shadow: 0px 0px 14px 0px rgba(0,0,0,0.75);
+  -moz-box-shadow: 0px 0px 14px 0px rgba(0,0,0,0.75);
+  box-shadow: 0px 0px 14px 0px rgba(0,0,0,0.75);
 }

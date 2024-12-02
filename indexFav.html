@@ -4,12 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./css/style.css">
-    <title>Pokedex</title>
+    <title>Mis Favoritos</title>
 </head>
 <body class="bodyFav">
     <header>
         <a href="./index.html"><img src="./assets/img/Pokemon_logo.svg.png" alt="Pokemon" class="poke-logo"></a>
     </header>
+    
     <div class="botonera">
         <input type="text" id="searchInput" placeholder="Buscar en tu Pokedex">
         <button id="searchBtn">Search</button>
@@ -17,14 +18,15 @@
         <button id="nextBtn">Next</button>
         <button id="resetBtn">Reset</button>    
     </div>
-    <div id="app"></div>
+
+    <div id="favoritosContainer">
+        
+    </div>
+
     <footer class="footer">
-        <button class="favBoton">
-            <a href="./indexFav.html"><img class="imgFav" src="./assets/img/pngwing.com.png" alt="pokeBall"></a>
-        </button>
+        <button class="favBoton"><a href="./index.html"><img class="imgFav" src="./assets/img/pngwing.com.png" alt="pokeBall"></a></button>
     </footer>
 
-    <script src="./js/script.js"></script>
+    <script src="./js/scriptFav.js"></script> 
 </body>
 </html>
-
