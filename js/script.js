@@ -27,8 +27,6 @@ const pokemonFetch = async () => {
             data.results.map((pokemon) => pokemonFetchData(pokemon.url))
         );
         
-        
-
         buscadorPokemon = detalles;
         cargarPokemones(buscadorPokemon); // Aca antes el parametro era detalle pero ahora lo actualizamos ya que en la linea de arriba lo igualamos al buscador 
         console.log("Data Completa Pokémon:", detalles);
@@ -125,7 +123,7 @@ document.addEventListener("click", (event) => {
         const pesoPokemon = pokeDatos.querySelector("p:nth-of-type(3)").textContent.trim();
         const imagenPokemon = pokeDatos.querySelector("img").src;
 
-        // Crear objeto Pokémon
+        // Creo mi objeto Pokémon con el dato del que selecciono con el event.target
         const pokemon = {
             nombre: nombrePokemon,
             tipo: tipoPokemon,
@@ -134,45 +132,43 @@ document.addEventListener("click", (event) => {
             imagen: imagenPokemon
         };
 
-        // Obtener favoritos desde localStorage
+        // En esta constante me estoy trayendo los datos que se guardan en el LocalStorage va arriba por cascada
         let favoritos = JSON.parse(localStorage.getItem("favoritos")) || [];
 
-        // Verificar si el Pokémon ya está en favoritos
+        // Acá Verifico si existe ya en el favoritos
         const existe = favoritos.some(fav => fav.nombre === pokemon.nombre);
 
-        // Si no está en favoritos, lo agregamos y cambiamos la clase a "imgEstrellaSumado"
+        // Si no lo tengo en fav, la agrego y cambio la clase para CSS
         if (!existe) {
             favoritos.push(pokemon);
             localStorage.setItem("favoritos", JSON.stringify(favoritos));
 
-            // Cambiar la clase de la estrella a "imgEstrellaSumado"
             event.target.classList.remove("imgEstrella");
             event.target.classList.add("imgEstrellaSumado");
         } else {
-            // Si ya está en favoritos, lo eliminamos y cambiamos la clase a "imgEstrella"
+            // Si ya está lo elimino y cambio la clase que puse
             favoritos = favoritos.filter(fav => fav.nombre !== pokemon.nombre);
             localStorage.setItem("favoritos", JSON.stringify(favoritos));
 
-            // Cambiar la clase de la estrella de vuelta a "imgEstrella"
+            
             event.target.classList.remove("imgEstrellaSumado");
             event.target.classList.add("imgEstrella");
         }
     }
 });
 
-// Al cargar la página, restauramos el estado de las estrellas según los favoritos almacenados
 document.addEventListener("DOMContentLoaded", () => {
-    // Obtener favoritos desde localStorage
+    // obtengo el local en esta const
     const favoritos = JSON.parse(localStorage.getItem("favoritos")) || [];
 
-    // Para cada estrella, verificamos si el Pokémon está en favoritos
+    // reviso si ya existe en fav
     const todasLasEstrellas = document.querySelectorAll(".imgEstrella, .imgEstrellaSumado");
 
     todasLasEstrellas.forEach(estrella => {
         const pokeDatos = estrella.closest(".pokeDatos");
         const nombrePokemon = pokeDatos.querySelector("h2").textContent.trim();
 
-        // Si el Pokémon está en favoritos, cambiamos la clase a "imgEstrellaSumado"
+        // Si el Pokémon está cambio clase
         const estaEnFavoritos = favoritos.some(fav => fav.nombre === nombrePokemon);
         if (estaEnFavoritos) {
             estrella.classList.remove("imgEstrella");

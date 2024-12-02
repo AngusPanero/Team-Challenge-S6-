@@ -15,24 +15,22 @@ document.addEventListener("click", (event) => {
             imagen: imagenPokemon
         };
 
-        // Obtener favoritos desde localStorage
+        // consigo los fav del local
         let favoritos = JSON.parse(localStorage.getItem("favoritos")) || [];
 
-        // Filtrar el Pokémon para eliminarlo de favoritos
+        // Filtro para eliminarlo
         favoritos = favoritos.filter(fav => fav.nombre !== pokemon.nombre);
         localStorage.setItem("favoritos", JSON.stringify(favoritos));
 
-        // Mostrar los favoritos actualizados
         mostrarFavoritos();
     }
 });
 
-// Función para mostrar los favoritos en la pantalla
 function mostrarFavoritos() {
     const favoritos = JSON.parse(localStorage.getItem("favoritos")) || [];
     const contenedorFavoritos = document.getElementById("favoritosContainer");
 
-    contenedorFavoritos.innerHTML = ""; // Limpiar el contenedor antes de agregar los nuevos favoritos
+    contenedorFavoritos.innerHTML = ""; 
 
     favoritos.forEach(pokemon => {
         contenedorFavoritos.innerHTML += `
@@ -40,7 +38,7 @@ function mostrarFavoritos() {
                 <h2>${pokemon.nombre.toUpperCase()}</h2>
                 <img src="${pokemon.imagen}" alt="${pokemon.nombre}">
                 <p>${pokemon.tipo}</p>
-                <p>A${pokemon.altura}</p>
+                <p>${pokemon.altura}</p>
                 <p>${pokemon.peso}</p>
                 <img class="imgEstrellaSumado" src="./assets/img/estrella.png" alt="estrella favorita">
             </div>
@@ -48,8 +46,5 @@ function mostrarFavoritos() {
     });
 }
 
-// Llamar a mostrarFavoritos cuando cargues la página para mostrar los favoritos guardados
-window.onload = function() {
-    mostrarFavoritos();
-};
+mostrarFavoritos();
 console.log(localStorage);
