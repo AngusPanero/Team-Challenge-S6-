@@ -1,3 +1,7 @@
+const search = document.getElementById("searchBtn");
+const searchInput = document.getElementById("searchInput");
+
+// Evento click para borrar favoritos
 document.addEventListener("click", (event) => {
     if (event.target.classList.contains("imgEstrellaSumado")) {
         const pokeDatos = event.target.closest(".pokeDatos");
@@ -15,22 +19,23 @@ document.addEventListener("click", (event) => {
             imagen: imagenPokemon
         };
 
-        // consigo los fav del local
+        // Consigo los favoritos del localStorage
         let favoritos = JSON.parse(localStorage.getItem("favoritos")) || [];
 
         // Filtro para eliminarlo
         favoritos = favoritos.filter(fav => fav.nombre !== pokemon.nombre);
         localStorage.setItem("favoritos", JSON.stringify(favoritos));
 
-        mostrarFavoritos();
+        mostrarFavoritos(); // Actualizo la visualización
     }
 });
 
-function mostrarFavoritos() {
-    const favoritos = JSON.parse(localStorage.getItem("favoritos")) || [];
+// Función para mostrar favoritos
+function mostrarFavoritos(pokemones = null) {
+    const favoritos = pokemones || JSON.parse(localStorage.getItem("favoritos")) || [];
     const contenedorFavoritos = document.getElementById("favoritosContainer");
 
-    contenedorFavoritos.innerHTML = ""; 
+    contenedorFavoritos.innerHTML = ""; // Limpio el contenedor antes de agregar los nuevos favoritos
 
     favoritos.forEach(pokemon => {
         contenedorFavoritos.innerHTML += `
@@ -46,5 +51,26 @@ function mostrarFavoritos() {
     });
 }
 
+// Evento del buscador
+search.addEventListener("click", () => {
+    const valorIngresado = searchInput.value.toLowerCase();
+
+    // Obtengo los favoritos desde localStorage para realizar la búsqueda
+    const favoritos = JSON.parse(localStorage.getItem("favoritos")) || [];
+
+    const pokemonFiltro = favoritos.filter(pokemon => 
+        // pokemon me representa cada Pokémon
+        pokemon.nombre.toLowerCase().includes(valorIngresado) || 
+        pokemon.tipo.toLowerCase().includes(valorIngresado)
+    );
+
+    if (pokemonFiltro.length === 0) { // Compruebo que esté vacío ya que no se ingresaría ningún valor
+        alert("¡No se ha encontrado al Pokémon!");
+    } else {
+        mostrarFavoritos(pokemonFiltro); // Muestro solo los resultados filtrados
+    }
+});
+
+// Llamo a mostrarFavoritos para inicializar la visualización con los datos del localStorage
 mostrarFavoritos();
 console.log(localStorage);

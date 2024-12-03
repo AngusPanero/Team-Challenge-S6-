@@ -11,7 +11,7 @@ let totalPaginas = 132;
 let paginaActual = 1;
 let buscadorPokemon = []; // Acá me estoy almacenando mis pokemones del buscdor para mostrarlos con la funcion cargar pokemon pero con el parama¡etro de la filtración
 
-
+// Acá me traigo los 10 primeros
 const pokemonFetch = async () => {
     const url = `https://pokeapi.co/api/v2/pokemon?offset=${offset}&limit=${limit}`;
     try {
@@ -38,7 +38,7 @@ const pokemonFetch = async () => {
         return [];
     }
 };
-
+// Acá traigo su data exacta, pasandola arriba para el promise all para que me itere cada url
 const pokemonFetchData = async (url) => {
     try {
         const response = await fetch(url);
